@@ -1,0 +1,241 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>To Do App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      id="all_min_css-css"
+      href="https://inventive.24livehost.com/inventive/wp-content/themes/inventive-studio/assets/css/all.min.css?ver=5.8.2"
+      media="all"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+      body {
+        font-family: "Montserrat", sans-serif !important;
+      }
+
+      p {
+        color: #373737;
+      }
+    </style>
+  </head>
+
+  <body style="background: #fafafa; margin: 0; padding: 0">
+    <table
+      style="
+        max-width: 640px;
+        width: 100%;
+        margin: 0 auto;
+        border: 0;
+        background: #fff;
+      "
+      border="0"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+    >
+      <thead>
+        <tr>
+          <td style="border: 0">
+            <table
+              width="100%"
+              border="0"
+              align="center"
+              cellpadding="0"
+              cellspacing="0"
+              style="background: #8c6054; padding: 0 24px"
+            >
+              <tr>
+                <td style="text-align: center">
+                  <img src="Logo.png" height="100" />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border: 0">
+            <table
+              width="100%"
+              border="0"
+              align="center"
+              cellpadding="0"
+              cellspacing="0"
+              style="text-align: center; padding: 24px"
+            >
+              <tr>
+                <td
+                  style="
+                    font-size: 22px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                  "
+                >
+                  Hi, <span style="color: #f58325">Chris</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p
+                    style="padding-top: 6px; font-weight: 600; font-size: 14px"
+                  >
+                    Thank you for taking the time to submit your problem.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="border: 0">
+            <table
+              width="100%"
+              border="0"
+              align="center"
+              cellpadding="0"
+              cellspacing="0"
+              style="text-align: center; padding: 0 24px 24px"
+            >
+              <tr>
+                <td
+                  style="
+                    background: #fafafa;
+                    border: 1px solid #eee;
+                    border-radius: 10px;
+                  "
+                >
+                  <table
+                    width="100%"
+                    border="0"
+                    align="center"
+                    cellpadding="0"
+                    cellspacing="0"
+                    style="text-align: center; padding: 24px"
+                  >
+                    <tr>
+                      <td>
+                        <p
+                          style="
+                            font-weight: 700;
+                            font-size: 14px;
+                            padding: 0 24px 24px;
+                          "
+                        >
+                          We have received the following enquiry:
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <table
+                          width="100%"
+                          border="0"
+                          align="center"
+                          cellpadding="0"
+                          cellspacing="0"
+                          style=""
+                        >
+                          <tr>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                width: 150px;
+                              "
+                            >
+                              Name
+                            </td>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                              "
+                            >
+                              <p style="opacity: 0.9"><%= user.name %></p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                width: 150px;
+                              "
+                            >
+                              Email
+                            </td>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                              "
+                            >
+                              <a
+                                href="mailto:chris@gmail.com"
+                                style="
+                                  opacity: 0.9;
+                                  color: #373737;
+                                  text-decoration: none;
+                                "
+                                ><%= user.email %></a
+                              >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                width: 150px;
+                              "
+                            >
+                              Description
+                            </td>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                              "
+                            >
+                              <p style="opacity: 0.9">
+                                Thank yor for registration , Your activation
+                                Code is <%= activationCode%>
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

@@ -50,10 +50,11 @@ export const userRegistration = CatchAsyncError(
 
         res.status(201).json({
           success: true,
-          message: `Please check your mail ${user.email}`,
+          message: `Please check your mail ${user.email} to activate your account`,
+          activationCode: activationToken.token,
         });
       } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler("Error in sending the mail", 400));
       }
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));

@@ -103,3 +103,7 @@ export const activateUser = CatchAsyncError(
     }
   }
 );
+
+export const loginUser = CatchAsyncError(
+  async (res: Response, req: Request, next: NextFunction) => {}
+);

@@ -1,6 +1,4 @@
 require("dotenv").config();
-import { NextFunction, Request, Response } from "express";
-import { CatchAsyncError } from "../middleware/catchAsyncError";
 import jwt, { Secret } from "jsonwebtoken";
 
 interface IActivationToken {

@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import mongoose, { Document, Schema, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -15,6 +16,8 @@ export interface IUser extends Document {
   isVerified: boolean;
   courses: Array<{ courseId: string }>;
   comparePassword: (password: string) => Promise<boolean>;
+  SignInAccessToken: () => string;
+  SignInRefreshToken: () => string;
 }
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
@@ -61,6 +64,16 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// * SIGN IN ACCESS TOKEN
+userSchema.methods.SignInAccessToken = async function () {
+  return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || "");
+};
+
+// * SIGN IN REFRESH TOKEN
+userSchema.methods.SignInRefreshToken = async function () {
+  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || "");
+};
 
 // *HASH PASSWORD BEFORE SAVING
 userSchema.pre<IUser>("save", async function (next) {

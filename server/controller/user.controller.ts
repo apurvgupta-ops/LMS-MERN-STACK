@@ -7,6 +7,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import sendMails from "../utils/sendMails";
 import ejs from "ejs";
 import path from "path";
+import { sendToken } from "../utils/sendToken";
 
 interface IRegisterUser {
   name: string;
@@ -18,6 +19,11 @@ interface IRegisterUser {
 interface IActivateUser {
   activation_token: string;
   activation_code: string;
+}
+
+interface IloginUser {
+  email: string;
+  password: string;
 }
 
 export const userRegistration = CatchAsyncError(
@@ -69,7 +75,8 @@ export const userRegistration = CatchAsyncError(
 );
 
 export const activateUser = CatchAsyncError(
-  async (res: Response, req: Request, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    // console.log(req.body);
     try {
       const { activation_token, activation_code } = req.body as IActivateUser;
 
@@ -83,7 +90,8 @@ export const activateUser = CatchAsyncError(
       }
 
       const { name, email, password } = newUser.user;
-      const alreadyExistedMail = await userModel.find({ email });
+      const alreadyExistedMail = await userModel.findOne({ email });
+      // console.log(email);
       if (alreadyExistedMail) {
         return next(new ErrorHandler("Email already exist", 400));
       }
@@ -96,7 +104,7 @@ export const activateUser = CatchAsyncError(
 
       res.status(201).json({
         success: true,
-        user,
+        // user,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
@@ -105,5 +113,27 @@ export const activateUser = CatchAsyncError(
 );
 
 export const loginUser = CatchAsyncError(
-  async (res: Response, req: Request, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body as IloginUser;
+
+      if (!email || !password) {
+        return next(new ErrorHandler("Please enter email and password", 400));
+      }
+      const user = await userModel.findOne({ email }).select("+password");
+      if (!user) {
+        return next(new ErrorHandler("Invalid email and password", 400));
+      }
+
+      const passwordMatch = await user.comparePassword(password);
+
+      if (!passwordMatch) {
+        return next(new ErrorHandler("Invalid email and password", 400));
+      }
+
+      sendToken(user, 200, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
 );

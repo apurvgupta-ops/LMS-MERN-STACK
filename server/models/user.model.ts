@@ -65,16 +65,6 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
   { timestamps: true }
 );
 
-// * SIGN IN ACCESS TOKEN
-userSchema.methods.SignInAccessToken = async function () {
-  return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || "");
-};
-
-// * SIGN IN REFRESH TOKEN
-userSchema.methods.SignInRefreshToken = async function () {
-  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || "");
-};
-
 // *HASH PASSWORD BEFORE SAVING
 userSchema.pre<IUser>("save", async function (next) {
   if (!this.isModified("password")) {
@@ -89,6 +79,16 @@ userSchema.methods.comparePassword = async function (
   enteredPassword: string
 ): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// * SIGN IN ACCESS TOKEN
+userSchema.methods.SignInAccessToken = function () {
+  return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || "");
+};
+
+// * SIGN IN REFRESH TOKEN
+userSchema.methods.SignInRefreshToken = function () {
+  return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || "");
 };
 
 const userModel: Model<IUser> = mongoose.model("User", userSchema);

@@ -5,6 +5,7 @@ import { redis } from "../utils/redis";
 import { CatchAsyncError } from "./catchAsyncError";
 import { NextFunction, Request, Response } from "express";
 
+// *AUTHENTICATE THE USER
 export const isAuthenticated = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.cookies.access_Token || "";
@@ -35,3 +36,13 @@ export const isAuthenticated = CatchAsyncError(
     next();
   }
 );
+
+// *VALIDATE THE USER ROLE
+export const userRole = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (roles.includes(req.user?.role || "")) {
+      return next(new ErrorHandler("You dont have access for this role", 403));
+    }
+    next();
+  };
+};

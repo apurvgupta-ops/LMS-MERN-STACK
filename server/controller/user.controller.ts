@@ -8,6 +8,7 @@ import sendMails from "../utils/sendMails";
 import ejs from "ejs";
 import path from "path";
 import { sendToken } from "../utils/sendToken";
+import { redis } from "../utils/redis";
 
 interface IRegisterUser {
   name: string;
@@ -116,6 +117,7 @@ export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body as IloginUser;
+      console.log(req.body);
 
       if (!email || !password) {
         return next(new ErrorHandler("Please enter email and password", 400));
@@ -132,6 +134,26 @@ export const loginUser = CatchAsyncError(
       }
 
       sendToken(user, 200, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+export const logoutUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.cookie("access_Token", "", { maxAge: 1 });
+      res.cookie("refresh_Token", "", { maxAge: 1 });
+
+      // *CLEAR THE CACHE FORM REDIS
+      const userId = req.user?._id || "";
+
+      redis.del(userId);
+      res.status(200).json({
+        success: true,
+        message: "User logged out successfully",
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

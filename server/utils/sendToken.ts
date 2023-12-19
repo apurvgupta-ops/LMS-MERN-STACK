@@ -1,7 +1,6 @@
 require("dotenv").config();
 import { Response } from "express";
 import { IUser } from "../models/user.model";
-import jwt from "jsonwebtoken";
 import { redis } from "./redis";
 
 interface ITokenOptions {

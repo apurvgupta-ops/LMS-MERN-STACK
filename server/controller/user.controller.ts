@@ -128,7 +128,6 @@ export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body as IloginUser;
-      console.log(req.body);
 
       if (!email || !password) {
         return next(new ErrorHandler("Please enter email and password", 400));
@@ -243,6 +242,8 @@ export const socialAuth = CatchAsyncError(
       } else {
         sendToken(user, 200, res);
       }
-    } catch (error) {}
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
   }
 );

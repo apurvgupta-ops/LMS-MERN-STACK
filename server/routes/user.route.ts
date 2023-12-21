@@ -18,9 +18,11 @@ userRoute.post("/registration", userRegistration);
 userRoute.post("/activate-user", activateUser);
 userRoute.post("/login", loginUser);
 userRoute.post("/social", socialAuth);
+
 userRoute.get("/logout", isAuthenticated, userRole("admin"), logoutUser);
 userRoute.get("/refresh", regenerateAccessToken);
 userRoute.get("/me", isAuthenticated, userInfo);
+
 userRoute.put("/update-user", isAuthenticated, updateUserInfo);
 userRoute.put("/update-user-password", isAuthenticated, updatePassword);
 userRoute.put("/update-user-avatar", isAuthenticated, updateAvatar);

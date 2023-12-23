@@ -23,6 +23,18 @@ interface IAddAnswer {
   questionId: string;
 }
 
+interface IAddReview {
+  rating: number;
+  userId: string;
+  review: string;
+}
+
+interface IAddReviewReply {
+  comment: string;
+  courseId: string;
+  reviewId: string;
+}
+
 export const uploadCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -180,7 +192,6 @@ export const getUserCourses = CatchAsyncError(
 );
 
 // *ADD QUESTIONS IN THE COURSES
-
 export const addQuestions = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -218,7 +229,6 @@ export const addQuestions = CatchAsyncError(
 );
 
 // *ADD ANSWERS TO PERTICULAR QUESTIONS
-
 export const addAnswers = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -278,6 +288,105 @@ export const addAnswers = CatchAsyncError(
           return next(new ErrorHandler(error.message, 500));
         }
       }
+
+      res.status(200).json({
+        success: true,
+        course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// *ADD REVIEW TO PERTICULAR COURSE
+export const addReviews = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userCourseList = req.user?.courses;
+      const courseId = req.params.id;
+
+      const courseExist = userCourseList?.some(
+        (course: any) => course._id.toString() === courseId.toString()
+      );
+
+      if (!courseExist) {
+        return next(
+          new ErrorHandler("You are not eligible for this course", 404)
+        );
+      }
+
+      const course = await CourseModel.findById(courseId);
+
+      const { rating, review } = req.body as IAddReview;
+
+      const reviewData: any = {
+        user: req.user,
+        rating,
+        comment: review,
+      };
+
+      course?.reviews?.push(reviewData);
+
+      let avgRating = 0;
+      course?.reviews.forEach((rev: any) => {
+        avgRating += rev.rating;
+      });
+
+      if (course) {
+        course.ratings = avgRating / course.reviews.length;
+      }
+
+      await course?.save();
+
+      const notification = {
+        title: "New Review Added",
+        message: `${req.user?.name} has given a review in ${course?.name}`,
+      };
+
+      // TODO: CREATE NOTIFICATION
+
+      res.status(201).json({
+        success: true,
+        course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// *ADD REVIEW REPLY TO PERTICULAR COURSE
+export const addReviewReply = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { comment, courseId, reviewId } = req.body as IAddReviewReply;
+
+      const course = await CourseModel.findById(courseId);
+
+      if (!course) {
+        return next(new ErrorHandler("Course not found", 400));
+      }
+
+      const review = await course?.reviews?.find((rev: any) => {
+        rev._id.toString() === reviewId;
+      });
+
+      if (!review) {
+        return next(new ErrorHandler("Review not found", 400));
+      }
+
+      const replyData: any = {
+        user: req.user,
+        comment,
+      };
+
+      if (!review?.commentReplies) {
+        review.commentReplies = [];
+      }
+      review?.commentReplies?.push(replyData);
+
+      await course?.save();
 
       res.status(200).json({
         success: true,

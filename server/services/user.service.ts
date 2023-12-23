@@ -1,5 +1,5 @@
 import { Response } from "express";
-import userModel from "../models/user.model";
+import UserModel from "../models/user.model";
 import ErrorHandler from "../utils/ErrorHandler";
 import { redis } from "../utils/redis";
 

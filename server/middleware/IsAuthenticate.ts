@@ -38,7 +38,7 @@ export const isAuthenticated = CatchAsyncError(
 );
 
 // *VALIDATE THE USER ROLE
-export const userRole = (...roles: string[]) => {
+export const authorizeRoles = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (roles.includes(req.user?.role || "")) {
       return next(new ErrorHandler("You dont have access for this role", 403));

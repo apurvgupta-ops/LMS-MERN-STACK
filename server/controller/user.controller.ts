@@ -1,6 +1,6 @@
 import { CatchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
-import userModel, { IUser } from "../models/user.model";
+import UserModel, { IUser } from "../models/user.model";
 import { NextFunction, Request, Response } from "express";
 import { createActivationToken } from "../utils/createActivationToken";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
@@ -57,7 +57,7 @@ export const userRegistration = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password, name } = req.body;
-      const isEmailExists = await userModel.findOne({ email });
+      const isEmailExists = await UserModel.findOne({ email });
       if (isEmailExists) {
         return next(new ErrorHandler("Email already exist", 400));
       }
@@ -117,13 +117,13 @@ export const activateUser = CatchAsyncError(
       }
 
       const { name, email, password } = newUser.user;
-      const alreadyExistedMail = await userModel.findOne({ email });
+      const alreadyExistedMail = await UserModel.findOne({ email });
       // console.log(email);
       if (alreadyExistedMail) {
         return next(new ErrorHandler("Email already exist", 400));
       }
 
-      const user = await userModel.create({
+      const user = await UserModel.create({
         name,
         email,
         password,
@@ -147,7 +147,7 @@ export const loginUser = CatchAsyncError(
       if (!email || !password) {
         return next(new ErrorHandler("Please enter email and password", 400));
       }
-      const user = await userModel.findOne({ email }).select("+password");
+      const user = await UserModel.findOne({ email }).select("+password");
       if (!user) {
         return next(new ErrorHandler("Invalid email and password", 400));
       }
@@ -241,9 +241,9 @@ export const socialAuth = CatchAsyncError(
     try {
       const { name, email, avatar } = req.body as ISocialAuth;
 
-      const user = await userModel.findOne({ email });
+      const user = await UserModel.findOne({ email });
       if (!user) {
-        const newUser = await userModel.create({ name, email, avatar });
+        const newUser = await UserModel.create({ name, email, avatar });
         sendToken(newUser, 200, res);
       } else {
         sendToken(user, 200, res);
@@ -270,10 +270,10 @@ export const updateUserInfo = CatchAsyncError(
     try {
       const { email, name } = req.body as IUpdateUser;
       const userId = req.user?._id;
-      const user = await userModel.findById(userId);
+      const user = await UserModel.findById(userId);
 
       if (email && user) {
-        const isEmailExist = await userModel.findOne({ email });
+        const isEmailExist = await UserModel.findOne({ email });
         if (isEmailExist) {
           return next(new ErrorHandler("Email already Exist", 400));
         }
@@ -303,7 +303,7 @@ export const updatePassword = CatchAsyncError(
     try {
       const { oldPassword, newPassword } = req.body as IUpdatePassword;
       const userId = req.user?._id;
-      const user = await userModel.findById(userId).select("+password");
+      const user = await UserModel.findById(userId).select("+password");
       if (!oldPassword && !newPassword) {
         return next(
           new ErrorHandler("Please provide old and new password", 400)
@@ -343,7 +343,7 @@ export const updateAvatar = CatchAsyncError(
       const { avatar } = req.body as IUpdateAvatar;
       const userId = req.user?._id;
 
-      const user = await userModel.findById(userId);
+      const user = await UserModel.findById(userId);
 
       if (avatar && user) {
         if (user?.avatar?.public_id) {

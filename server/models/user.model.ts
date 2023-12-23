@@ -94,6 +94,6 @@ userSchema.methods.SignInRefreshToken = function () {
   });
 };
 
-const userModel: Model<IUser> = mongoose.model("User", userSchema);
+const UserModel: Model<IUser> = mongoose.model("User", userSchema);
 
-export default userModel;
+export default UserModel;

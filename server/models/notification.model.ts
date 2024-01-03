@@ -21,13 +21,14 @@ const notificationSchema = new Schema<INotification>(
     status: {
       type: String,
       required: true,
+      default: "unread",
     },
   },
   { timestamps: true }
 );
 
 const NotificationModel: Model<INotification> = mongoose.model(
-  "Order",
+  "Notification",
   notificationSchema
 );
 

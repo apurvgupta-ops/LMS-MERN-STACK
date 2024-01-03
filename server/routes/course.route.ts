@@ -5,6 +5,7 @@ import {
   addReviewReply,
   addReviews,
   editCourseById,
+  getAllCourse,
   getAllCourses,
   getSingleCourseById,
   getUserCourses,
@@ -30,6 +31,12 @@ courseRoute.get("/get-course/:id", getSingleCourseById);
 courseRoute.get("/get-all-courses", getAllCourses);
 courseRoute.get("/get-course-content/:id", isAuthenticated, getUserCourses);
 courseRoute.get("/add-questions", isAuthenticated, addQuestions);
+courseRoute.get(
+  "/get-all-user",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getAllCourse
+);
 
 courseRoute.put("/add-answers", isAuthenticated, addAnswers);
 courseRoute.put("/add-review", isAuthenticated, addReviews);

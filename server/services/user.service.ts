@@ -13,3 +13,12 @@ export const getUserById = async (res: Response, id: string) => {
     });
   }
 };
+
+export const getAllUserServices = async (res: Response) => {
+  const users = await UserModel.find().sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+};

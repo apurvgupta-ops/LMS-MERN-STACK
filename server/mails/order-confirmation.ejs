@@ -3,7 +3,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Question Replies</title>
+    <title>Order Confirmation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -144,6 +144,7 @@
                           align="center"
                           cellpadding="0"
                           cellspacing="0"
+                          style=""
                         >
                           <tr>
                             <td
@@ -175,8 +176,29 @@
                                 padding: 8px;
                                 font-size: 14px;
                                 font-weight: 600;
+                                width: 150px;
                               "
-                            ></td>
+                            >
+                              Email
+                            </td>
+                            <td
+                              style="
+                                border: 1px solid #eee;
+                                padding: 8px;
+                                font-size: 14px;
+                                font-weight: 600;
+                              "
+                            >
+                              <a
+                                href="mailto:chris@gmail.com"
+                                style="
+                                  opacity: 0.9;
+                                  color: #373737;
+                                  text-decoration: none;
+                                "
+                                ><%= user.email %></a
+                              >
+                            </td>
                           </tr>
                           <tr>
                             <td
@@ -199,7 +221,8 @@
                               "
                             >
                               <p style="opacity: 0.9">
-                                Thank you for showung interest
+                                Thank yor for registration , Your activation
+                                Code is <%= activationCode%>
                               </p>
                             </td>
                           </tr>

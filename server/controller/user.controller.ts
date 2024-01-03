@@ -14,7 +14,7 @@ import {
 } from "../utils/sendToken";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
-import { getUserById } from "../services/user.service";
+import { getAllUserServices, getUserById } from "../services/user.service";
 
 interface IRegisterUser {
   name: string;
@@ -378,6 +378,19 @@ export const updateAvatar = CatchAsyncError(
         success: true,
         user,
       });
-    } catch (error) {}
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// *GET ALL USER ---FOR ADMIN
+export const getAllUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUserServices(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
   }
 );

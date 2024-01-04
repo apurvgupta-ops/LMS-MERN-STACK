@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs";
 import sendMails from "../utils/sendMails";
+import NotificationModel from "../models/notification.model";
 
 interface IAddQuestions {
   question: string;
@@ -215,6 +216,12 @@ export const addQuestions = CatchAsyncError(
         questionsReplies: [],
       };
 
+      await NotificationModel.create({
+        user: req.user?._id,
+        title: "New Question Added",
+        message: `You have a new question in ${courseContent?.title}`,
+      });
+
       courseContent.question.push(newQuestions);
       await course?.save();
 
@@ -266,6 +273,11 @@ export const addAnswers = CatchAsyncError(
 
       // * CREATE NOTIFICATION
       if (req.user?._id === question.user._id) {
+        await NotificationModel.create({
+          user: req.user?._id,
+          title: "New Answer Added",
+          message: `You have a new answer in ${courseContent?.title}`,
+        });
       } else {
         const data = {
           name: question.user.name,

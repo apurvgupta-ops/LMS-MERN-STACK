@@ -19,4 +19,5 @@ notificationRoute.put(
   authorizeRoles("admin"),
   updateNotification
 );
+
 export default notificationRoute;

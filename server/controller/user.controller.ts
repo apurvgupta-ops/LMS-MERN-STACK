@@ -14,7 +14,11 @@ import {
 } from "../utils/sendToken";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
-import { getAllUserServices, getUserById } from "../services/user.service";
+import {
+  getAllUserServices,
+  getUserById,
+  updateUserRole,
+} from "../services/user.service";
 
 interface IRegisterUser {
   name: string;
@@ -389,6 +393,41 @@ export const getAllUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllUserServices(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// * UPDATE USER ROLE
+export const updateUserRoleInfo = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role } = req.body;
+      updateUserRole(res, id, role);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// * DELETE USER
+export const deleteUserById = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const user = await UserModel.findById(id);
+
+      if (!user) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+      await UserModel.deleteOne({ id });
+      await redis.del(id);
+
+      res.status(201).json({
+        success: true,
+        message: "User deleted successfully",
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

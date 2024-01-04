@@ -5,7 +5,7 @@ const orderRoute = express.Router();
 
 orderRoute.post("/create-order", isAuthenticated, createOrder);
 orderRoute.get(
-  "/get-all-user",
+  "/get-all-orders",
   isAuthenticated,
   authorizeRoles("admin"),
   getAllOrder

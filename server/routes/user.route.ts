@@ -1,6 +1,7 @@
 import express from "express";
 import {
   activateUser,
+  deleteUserById,
   getAllUser,
   loginUser,
   logoutUser,
@@ -9,6 +10,7 @@ import {
   updateAvatar,
   updatePassword,
   updateUserInfo,
+  updateUserRoleInfo,
   userInfo,
   userRegistration,
 } from "../controller/user.controller";
@@ -33,5 +35,18 @@ userRoute.get(
 userRoute.put("/update-user", isAuthenticated, updateUserInfo);
 userRoute.put("/update-user-password", isAuthenticated, updatePassword);
 userRoute.put("/update-user-avatar", isAuthenticated, updateAvatar);
+userRoute.put(
+  "/update-user-role",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  updateUserRoleInfo
+);
+
+userRoute.delete(
+  "/delete-user/:id",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  deleteUserById
+);
 
 export default userRoute;

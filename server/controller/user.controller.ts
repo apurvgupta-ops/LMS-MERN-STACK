@@ -206,7 +206,9 @@ export const regenerateAccessToken = CatchAsyncError(
       const session = await redis.get(decoded.id as string);
 
       if (!session) {
-        return next(new ErrorHandler("No refresh token", 400));
+        return next(
+          new ErrorHandler("Please login to access this resource", 400)
+        );
       }
 
       const user = JSON.parse(session);
@@ -228,6 +230,7 @@ export const regenerateAccessToken = CatchAsyncError(
       // *SET COOKIES
       res.cookie("access_Token", accessToken, accessTokenOptions);
       res.cookie("refresh_Token", refreshToken, refreshTokenOptions);
+      await redis.set(user._id, JSON.stringify(user), "EX", 604800); // 7 DAYS
       console.log(accessToken);
 
       res.status(200).json({

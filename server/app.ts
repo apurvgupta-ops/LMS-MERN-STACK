@@ -6,6 +6,7 @@ import userRoute from "./routes/user.route";
 import courseRoute from "./routes/course.route";
 import orderRoute from "./routes/order.route";
 import notificationRoute from "./routes/notification.route";
+import analyticsRoute from "./routes/analytics.route";
 
 export const app = express();
 
@@ -23,7 +24,14 @@ app.use(
 );
 
 // * MAIN ROUTES
-app.use("/api/v1", userRoute, courseRoute, orderRoute, notificationRoute);
+app.use(
+  "/api/v1",
+  userRoute,
+  courseRoute,
+  orderRoute,
+  notificationRoute,
+  analyticsRoute
+);
 
 // *TESTING API
 app.use("/test", (req: Request, res: Response, next: NextFunction) => {

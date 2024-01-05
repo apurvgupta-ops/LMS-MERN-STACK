@@ -85,37 +85,40 @@ const courseDataSchema = new Schema<ICourseData>({
   question: [commentSchema],
 });
 
-const courseSchema = new Schema<ICourse>({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  price: { type: String, required: true },
-  estimatedPrice: Number,
-  thumbnail: {
-    public_id: {
-      type: String,
-      required: true,
+const courseSchema = new Schema<ICourse>(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: String, required: true },
+    estimatedPrice: Number,
+    thumbnail: {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
     },
-    url: {
-      type: String,
-      required: true,
+    tags: { type: String, required: true },
+    level: { type: String, required: true },
+    demoUrl: { type: String, required: true },
+    benefits: [{ title: String }],
+    prerequisites: [{ title: String }],
+    reviews: [reviewSchema],
+    courseData: [courseDataSchema],
+    ratings: {
+      type: Number,
+      default: 0,
+    },
+    purchased: {
+      type: Number,
+      default: 0,
     },
   },
-  tags: { type: String, required: true },
-  level: { type: String, required: true },
-  demoUrl: { type: String, required: true },
-  benefits: [{ title: String }],
-  prerequisites: [{ title: String }],
-  reviews: [reviewSchema],
-  courseData: [courseDataSchema],
-  ratings: {
-    type: Number,
-    default: 0,
-  },
-  purchased: {
-    type: Number,
-    default: 0,
-  },
-});
+  { timestamps: true }
+);
 
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
 
